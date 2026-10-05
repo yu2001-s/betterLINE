@@ -1,0 +1,66 @@
+name: betterLINE
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    macOS: "15.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    # Ad hoc signing works out of the box. Set CODE_SIGN_IDENTITY to
+    # "Apple Development" and DEVELOPMENT_TEAM to your team ID so the keychain
+    # keeps trusting the app across rebuilds instead of asking every time.
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    ENABLE_HARDENED_RUNTIME: YES
+    DEAD_CODE_STRIPPING: YES
+targets:
+  betterLINE:
+    type: application
+    platform: macOS
+    sources: [betterLINE]
+    info:
+      path: betterLINE/Info.plist
+      properties:
+        CFBundleDisplayName: betterLINE
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        LSApplicationCategoryType: public.app-category.social-networking
+        NSHumanReadableCopyright: Personal LINE client
+        # The server is reached over Tailscale (WireGuard-encrypted) by MagicDNS name.
+        # Replace your-tailnet.ts.net with your tailnet's domain.
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+          NSExceptionDomains:
+            your-tailnet.ts.net:
+              NSIncludesSubdomains: true
+              NSExceptionAllowsInsecureHTTPLoads: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.betterline
+        GENERATE_INFOPLIST_FILE: NO
+        ENABLE_APP_SANDBOX: NO
+      configs:
+        # Development builds keep their own settings, keychain item and caches,
+        # apart from the installed app.
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.example.betterline.debug
+  betterLINETests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [betterLINETests]
+    dependencies:
+      - target: betterLINE
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/betterLINE.app/Contents/MacOS/betterLINE"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+schemes:
+  betterLINE:
+    build:
+      targets:
+        betterLINE: all
+    test:
+      targets: [betterLINETests]

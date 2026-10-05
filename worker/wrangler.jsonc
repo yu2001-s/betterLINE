@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "line-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "kv_namespaces": [
+    { "binding": "OAUTH_KV", "id": "YOUR_KV_NAMESPACE_ID" }
+  ],
+  "vpc_services": [
+    { "binding": "LINE_BACKEND", "service_id": "YOUR_VPC_SERVICE_ID", "remote": true }
+  ]
+  // Secrets (wrangler secret put): BACKEND_KEY, OWNER_PASSPHRASE_SHA256
+}

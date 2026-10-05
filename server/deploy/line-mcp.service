@@ -1,0 +1,17 @@
+[Unit]
+Description=LINE MCP server (personal account)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/lineMCP/server
+EnvironmentFile=%h/.config/line-mcp/env
+ExecStart=%h/.local/share/mise/shims/node src/main.ts
+Restart=on-failure
+RestartSec=10
+UMask=0077
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target

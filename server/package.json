@@ -1,0 +1,27 @@
+{
+  "name": "line-mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/main.ts",
+    "login": "node src/login.ts",
+    "check": "tsc --noEmit",
+    "test": "node --test \"src/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@jsr/evex__linejs": "^3.4.2",
+    "@modelcontextprotocol/sdk": "^1.32.0",
+    "opencc-js": "^1.4.2",
+    "qrcode-terminal": "^0.12.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/qrcode-terminal": "^0.12.2",
+    "typescript": "^7.0.2"
+  }
+}

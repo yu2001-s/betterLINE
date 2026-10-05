@@ -1,0 +1,15 @@
+[Unit]
+Description=Cloudflare Tunnel for LINE MCP (Workers VPC)
+After=network-online.target line-mcp.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/mise exec cloudflared@2026.9.3 -- cloudflared tunnel --no-autoupdate --metrics 127.0.0.1:20243 run --token-file %h/.config/line-mcp/tunnel-token
+Restart=always
+RestartSec=5
+UMask=0077
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=default.target
