@@ -160,10 +160,20 @@ struct FormattingTests {
 	}
 }
 
+/// Defaults kept in memory. A real suite leaves a plist in ~/Library/Preferences
+/// on every run, even after removePersistentDomain.
+private final class MemoryDefaults: UserDefaults {
+	private var values: [String: Any] = [:]
+	init() { super.init(suiteName: "betterLINE.tests")! }
+	override func object(forKey key: String) -> Any? { values[key] }
+	override func set(_ value: Any?, forKey key: String) { values[key] = value }
+	override func removeObject(forKey key: String) { values[key] = nil }
+}
+
 @MainActor
 struct OrganizerTests {
 	private func fresh() -> Organizer {
-		let defaults = UserDefaults(suiteName: "betterLINE.tests.\(UUID().uuidString)")!
+		let defaults = MemoryDefaults()
 		return Organizer(defaults: defaults)
 	}
 
@@ -185,7 +195,7 @@ struct OrganizerTests {
 	}
 
 	@Test func hiddenChatsPersist() throws {
-		let defaults = UserDefaults(suiteName: "betterLINE.tests.\(UUID().uuidString)")!
+		let defaults = MemoryDefaults()
 		let organizer = Organizer(defaults: defaults)
 		let group = try #require(organizer.addGroup(named: "朋友"))
 		organizer.assign("c9", to: group.id)
